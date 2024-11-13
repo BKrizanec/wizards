@@ -46,6 +46,8 @@ class FrostSpell extends Spell{
     }
 }
 
+type SpellName<S> = S extends FireSpell? FireSpellName : FrostSpellName
+
 class Wizard<S extends Spell> {
     private spellBook: S[] = []
 
@@ -59,7 +61,7 @@ class Wizard<S extends Spell> {
         })
     }
 
-    castFromSpellBook(name: string){
+    castFromSpellBook(name: SpellName<S>){
         const spell = this.spellBook.find((spell) => spell.name == name)
         if(spell){
             spell.cast()
@@ -70,7 +72,10 @@ class Wizard<S extends Spell> {
 }
 
 const fireSpells: FireSpell[] = [new FireSpell(FireSpellName.FireBolt)]
-const frostSpell: FrostSpell[] = [new FrostSpell(FrostSpellName.FrostBolt)]
+const frostSpells: FrostSpell[] = [new FrostSpell(FrostSpellName.FrostBolt)]
 
 
 const wizard = new Wizard<FireSpell>(fireSpells);
+
+const frostWizard = new Wizard(frostSpells);
+frostWizard.castFromSpellBook(FrostSpellName.Blizzard);
